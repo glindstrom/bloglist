@@ -96,4 +96,15 @@ describe('top blogs', () => {
 
     expect(result).toEqual(expected)
   })
+
+  test('author with most blogs is returned', () => {
+    const expected = {
+      author: 'Robert C. Martin',
+      blogs: 3
+    }
+    const result = listHelper.mostBlogs(blogs)
+    console.log('result:', result)
+
+    expect(result).toEqual(expected)
+  })
 })

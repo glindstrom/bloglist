@@ -14,18 +14,31 @@ const favoriteBlog = blogs =>
       return favorite
     }
   }, {})
+
 const mostBlogs = blogs =>
   _(blogs)
     .groupBy('author')
     .toPairs()
-    .orderBy(kvArray => kvArray[1].length, ["desc"])
+    .orderBy(kvArray => kvArray[1].length, ['desc'])
     .map(kvArray => {
       return { author: kvArray[0], blogs: kvArray[1].length }
-    }).value()[0]
+    })
+    .value()[0]
+
+const mostLikes = blogs =>
+  _(blogs)
+    .groupBy('author')
+    .toPairs()
+    .map(kvArray => {
+      return { author: kvArray[0], likes: totalLikes(kvArray[1]) }
+    })
+    .orderBy(ent => ent.likes, ['desc'])
+    .value()[0]
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }

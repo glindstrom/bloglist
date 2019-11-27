@@ -32,6 +32,29 @@ describe('get blogs', () => {
   })
 })
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'new blog title',
+    author: 'blog author',
+    url: 'http://localhost',
+    likes: 666
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAfterPost = await helper.blogsInDb()
+
+  expect(blogsAfterPost.length).toBe(helper.initialBlogs.length + 1)
+
+  const blogTitles = blogsAfterPost.map(blog => blog.title)
+
+  expect(blogTitles).toContain('new blog title')
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

@@ -31,28 +31,42 @@ describe('get blogs', () => {
     expect(blog._id).not.toBeDefined()
   })
 })
+describe('add blog', () => {
+  test('a valid blog can be added', async () => {
+    const newBlog = {
+      title: 'new blog title',
+      author: 'blog author',
+      url: 'http://localhost',
+      likes: 666
+    }
 
-test('a valid blog can be added', async () => {
-  const newBlog = {
-    title: 'new blog title',
-    author: 'blog author',
-    url: 'http://localhost',
-    likes: 666
-  }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+    const blogsAfterPost = await helper.blogsInDb()
 
-  const blogsAfterPost = await helper.blogsInDb()
+    expect(blogsAfterPost.length).toBe(helper.initialBlogs.length + 1)
 
-  expect(blogsAfterPost.length).toBe(helper.initialBlogs.length + 1)
+    const blogTitles = blogsAfterPost.map(blog => blog.title)
 
-  const blogTitles = blogsAfterPost.map(blog => blog.title)
+    expect(blogTitles).toContain('new blog title')
+  })
+  test('likes are set to zero if omitted', async () => {
+    const newBlog = {
+      title: 'new blog title',
+      author: 'blog author',
+      url: 'http://localhost'
+    }
+    const response = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
 
-  expect(blogTitles).toContain('new blog title')
+    expect(response.body.likes).toBe(0)
+  })
 })
 
 afterAll(() => {

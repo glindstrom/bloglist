@@ -91,7 +91,7 @@ describe('add blog', () => {
   })
 })
 describe('delete blog', () => {
-  test('succeeds with status code 204 is id is valid', async () => {
+  test('succeeds with status code 204 when id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
@@ -102,6 +102,32 @@ describe('delete blog', () => {
     expect(blogsAtEnd.length).toBe(helper.initialBlogs.length - 1)
 
     expect(blogsAtEnd).not.toContainEqual(blogToDelete)
+  })
+})
+
+describe('update blog', () => {
+  test('updating likes succeeds with status code 200 when id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const requestBody = {
+      title: blogToUpdate.title,
+      author: blogToUpdate.author,
+      url: blogToUpdate.url,
+      likes: blogToUpdate.likes + 1
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(requestBody)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const updatedBlog = blogsAtEnd.find(blog => blog.id === blogToUpdate.id)
+
+    expect(updatedBlog.likes).toBe(blogToUpdate.likes + 1)
+    expect(updatedBlog.title).toBe(blogToUpdate.title)
+    expect(updatedBlog.author).toBe(blogToUpdate.author)
+    expect(updatedBlog.url).toBe(blogToUpdate.url)
   })
 })
 

@@ -67,6 +67,28 @@ describe('add blog', () => {
 
     expect(response.body.likes).toBe(0)
   })
+  test('bad request is returned if title is missing', async () => {
+    const newBlog = {
+      author: 'blog author',
+      likes: 666,
+      url: 'http://localhost'
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+  test('bad request is returned if url is missing', async () => {
+    const newBlog = {
+      author: 'blog author',
+      likes: 666,
+      title: 'new blog title'
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
 })
 
 afterAll(() => {

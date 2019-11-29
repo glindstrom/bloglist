@@ -12,11 +12,14 @@
   "author": "Gabriel Lindström",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^3.0.7",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lodash": "^4.17.15",
-    "mongoose": "^5.7.11"
+    "mongoose": "^5.7.11",
+    "mongoose-unique-validator": "^2.0.3",
+    "sinon": "^7.5.0"
   },
   "devDependencies": {
     "eslint": "^6.1.0",
